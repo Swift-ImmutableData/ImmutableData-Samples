@@ -14,6 +14,8 @@
 //  limitations under the License.
 //
 
+import Collections
+
 public enum AnimalsReducer {
   @Sendable public static func reduce(
     state: AnimalsState,
@@ -240,7 +242,7 @@ extension AnimalsReducer {
     switch result {
     case .success(animals: let animals, categories: let categories):
       do {
-        var data: Dictionary<Animal.ID, Animal> = [:]
+        var data: TreeDictionary<Animal.ID, Animal> = [:]
         for animal in animals {
           data[animal.id] = animal
         }
@@ -248,7 +250,7 @@ extension AnimalsReducer {
         state.animals.status = .success
       }
       do {
-        var data: Dictionary<Category.ID, Category> = [:]
+        var data: TreeDictionary<Category.ID, Category> = [:]
         for category in categories {
           data[category.id] = category
         }

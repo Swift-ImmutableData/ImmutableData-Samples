@@ -16,6 +16,7 @@
 
 import AnimalsData
 import AsyncSequenceTestUtils
+import Collections
 import ImmutableData
 import Testing
 
@@ -179,7 +180,7 @@ extension StoreTestDouble : ImmutableData.Streamer {
 extension ListenerTests {
   private static let state = AnimalsState(
     categories: AnimalsState.Categories(
-      data: Dictionary(
+      data: TreeDictionary(
         Category.amphibian,
         Category.bird,
         Category.fish,
@@ -189,7 +190,7 @@ extension ListenerTests {
       )
     ),
     animals: AnimalsState.Animals(
-      data: Dictionary(
+      data: TreeDictionary(
         Animal.dog,
         Animal.cat,
         Animal.kangaroo,

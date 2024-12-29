@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import Collections
 import Foundation
 import ImmutableData
 import QuakesData
@@ -67,7 +68,7 @@ extension ModelContext {
 @Suite(.serialized) final actor LocalStoreTests {
   private static let state = QuakesState(
     quakes: QuakesState.Quakes(
-      data: Dictionary(
+      data: TreeDictionary(
         Quake(
           quakeId: "1",
           magnitude: 0.5,
@@ -163,7 +164,7 @@ extension LocalStoreTests {
     
     let quakes = try await store.fetchLocalQuakesQuery()
     
-    #expect(Dictionary(quakes) == Self.state.quakes.data)
+    #expect(TreeDictionary(quakes) == Self.state.quakes.data)
     
     #expect(store.modelExecutor.modelContext.hasChanges == false)
   }
@@ -211,7 +212,7 @@ extension LocalStoreTests {
     
     let array = try store.modelExecutor.modelContext.fetch(QuakeModel.self)
     let quakes = array.map { model in model.quake() }
-    #expect(Dictionary(quakes) == {
+    #expect(TreeDictionary(quakes) == {
       var data = Self.state.quakes.data
       data["1"] = Quake(
         quakeId: "1",
@@ -247,7 +248,7 @@ extension LocalStoreTests {
     
     let array = try store.modelExecutor.modelContext.fetch(QuakeModel.self)
     let quakes = array.map { model in model.quake() }
-    #expect(Dictionary(quakes) == {
+    #expect(TreeDictionary(quakes) == {
       var data = Self.state.quakes.data
       data[quake.id] = nil
       return data

@@ -14,19 +14,13 @@
 //  limitations under the License.
 //
 
+import Collections
+import CowBox
 import Foundation
 
-public struct AnimalsState: Hashable, Sendable {
+@CowBox(init: .withPackage) public struct AnimalsState: Hashable, Sendable {
   package var categories: Categories
   package var animals: Animals
-  
-  package init(
-    categories: Categories,
-    animals: Animals
-  ) {
-    self.categories = categories
-    self.animals = animals
-  }
 }
 
 extension AnimalsState {
@@ -39,46 +33,28 @@ extension AnimalsState {
 }
 
 extension AnimalsState {
-  package struct Categories: Hashable, Sendable {
-    package var data: Dictionary<Category.ID, Category> = [:]
+  @CowBox(init: .withPackage) package struct Categories: Hashable, Sendable {
+    package var data: TreeDictionary<Category.ID, Category> = [:]
     package var status: Status? = nil
-    
-    package init(
-      data: Dictionary<Category.ID, Category> = [:],
-      status: Status? = nil
-    ) {
-      self.data = data
-      self.status = status
-    }
   }
 }
 
 extension AnimalsState {
-  package struct Animals: Hashable, Sendable {
-    package var data: Dictionary<Animal.ID, Animal> = [:]
+  @CowBox(init: .withPackage) package struct Animals: Hashable, Sendable {
+    package var data: TreeDictionary<Animal.ID, Animal> = [:]
     package var status: Status? = nil
-    package var queue: Dictionary<Animal.ID, Status> = [:]
-    
-    package init(
-      data: Dictionary<Animal.ID, Animal> = [:],
-      status: Status? = nil,
-      queue: Dictionary<Animal.ID, Status> = [:]
-    ) {
-      self.data = data
-      self.status = status
-      self.queue = queue
-    }
+    package var queue: TreeDictionary<Animal.ID, Status> = [:]
   }
 }
 
 extension AnimalsState {
-  fileprivate func selectCategories() -> Dictionary<Category.ID, Category> {
+  fileprivate func selectCategories() -> TreeDictionary<Category.ID, Category> {
     self.categories.data
   }
 }
 
 extension AnimalsState {
-  public static func selectCategories() -> @Sendable (Self) -> Dictionary<Category.ID, Category> {
+  public static func selectCategories() -> @Sendable (Self) -> TreeDictionary<Category.ID, Category> {
     { state in state.selectCategories() }
   }
 }
@@ -161,7 +137,7 @@ extension AnimalsState {
 }
 
 extension AnimalsState {
-  fileprivate func selectAnimals(categoryId: Category.ID?) -> Dictionary<Animal.ID, Animal> {
+  fileprivate func selectAnimals(categoryId: Category.ID?) -> TreeDictionary<Animal.ID, Animal> {
     guard
       let categoryId = categoryId
     else {
@@ -172,7 +148,7 @@ extension AnimalsState {
 }
 
 extension AnimalsState {
-  public static func selectAnimals(categoryId: Category.ID?) -> @Sendable (Self) -> Dictionary<Animal.ID, Animal> {
+  public static func selectAnimals(categoryId: Category.ID?) -> @Sendable (Self) -> TreeDictionary<Animal.ID, Animal> {
     { state in state.selectAnimals(categoryId: categoryId) }
   }
 }

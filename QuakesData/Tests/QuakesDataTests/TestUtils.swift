@@ -15,6 +15,7 @@
 //
 
 import Algorithms
+import Collections
 
 extension Dictionary {
   public init(_ values: Value...) where Key == Value.ID, Value : Identifiable {
@@ -81,4 +82,20 @@ func product<Base1, Base2, Base3, Base4>(
   }
   
   return result
+}
+
+extension TreeDictionary {
+  init(_ values: Value...) where Key == Value.ID, Value : Identifiable {
+    self.init(values)
+  }
+}
+
+extension TreeDictionary {
+  init<S>(_ values: S) where Key == Value.ID, Value : Identifiable, S : Sequence, S.Element == Value {
+    self.init(
+      uniqueKeysWithValues: values.map { element in
+        (element.id, element)
+      }
+    )
+  }
 }

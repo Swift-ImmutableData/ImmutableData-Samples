@@ -14,17 +14,11 @@
 //  limitations under the License.
 //
 
-public struct Category: Hashable, Codable, Sendable {
+import CowBox
+
+@CowBox(init: .withPackage) public struct Category: Hashable, Codable, Sendable {
   public let categoryId: String
   public let name: String
-  
-  package init(
-    categoryId: String,
-    name: String
-  ) {
-    self.categoryId = categoryId
-    self.name = name
-  }
 }
 
 extension Category: Identifiable {

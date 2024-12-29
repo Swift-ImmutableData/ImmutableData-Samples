@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import Collections
 import ImmutableData
 import ImmutableUI
 import QuakesData
@@ -66,7 +67,7 @@ extension ImmutableUI.Selector {
 }
 
 @MainActor @propertyWrapper struct SelectQuakes: DynamicProperty {
-  @ImmutableUI.Selector<ImmutableData.Store<QuakesState, QuakesAction>, Dictionary<Quake.ID, Quake>> var wrappedValue: Dictionary<Quake.ID, Quake>
+  @ImmutableUI.Selector<ImmutableData.Store<QuakesState, QuakesAction>, TreeDictionary<Quake.ID, Quake>> var wrappedValue: TreeDictionary<Quake.ID, Quake>
   
   init(
     searchText: String,
@@ -95,7 +96,7 @@ extension SelectQuakes {
 }
 
 @MainActor @propertyWrapper struct SelectQuakesValues: DynamicProperty {
-  @ImmutableUI.Selector<ImmutableData.Store<QuakesState, QuakesAction>, Dictionary<Quake.ID, Quake>, Array<Quake>> var wrappedValue: Array<Quake>
+  @ImmutableUI.Selector<ImmutableData.Store<QuakesState, QuakesAction>, TreeDictionary<Quake.ID, Quake>, Array<Quake>> var wrappedValue: Array<Quake>
   
   init(
     searchText: String,

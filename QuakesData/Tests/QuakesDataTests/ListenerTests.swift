@@ -15,6 +15,7 @@
 //
 
 import AsyncSequenceTestUtils
+import Collections
 import Foundation
 import ImmutableData
 import QuakesData
@@ -194,7 +195,7 @@ extension StoreTestDouble : ImmutableData.Streamer {
 extension ListenerTests {
   private static let state = QuakesState(
     quakes: QuakesState.Quakes(
-      data: Dictionary(
+      data: TreeDictionary(
         Quake(
           quakeId: "1",
           magnitude: 0.5,

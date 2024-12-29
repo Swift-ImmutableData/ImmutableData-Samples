@@ -14,9 +14,10 @@
 //  limitations under the License.
 //
 
+import CowBox
 import Foundation
 
-public struct Quake: Hashable, Sendable {
+@CowBox(init: .withPackage) public struct Quake: Hashable, Sendable {
   public let quakeId: String
   public let magnitude: Double
   public let time: Date
@@ -24,24 +25,6 @@ public struct Quake: Hashable, Sendable {
   public let name: String
   public let longitude: Double
   public let latitude: Double
-  
-  package init(
-    quakeId: String,
-    magnitude: Double,
-    time: Date,
-    updated: Date,
-    name: String,
-    longitude: Double,
-    latitude: Double
-  ) {
-    self.quakeId = quakeId
-    self.magnitude = magnitude
-    self.time = time
-    self.updated = updated
-    self.name = name
-    self.longitude = longitude
-    self.latitude = latitude
-  }
 }
 
 extension Quake: Identifiable {

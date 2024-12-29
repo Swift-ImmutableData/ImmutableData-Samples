@@ -15,6 +15,7 @@
 //
 
 import AnimalsData
+import Collections
 import Foundation
 import SwiftData
 import Testing
@@ -75,7 +76,7 @@ final fileprivate class IncrementalStoreUUIDTestDouble : IncrementalStoreUUID {
 @Suite(.serialized) final actor LocalStoreTests {
   private static let state = AnimalsState(
     categories: AnimalsState.Categories(
-      data: Dictionary(
+      data: TreeDictionary(
         Category.amphibian,
         Category.bird,
         Category.fish,
@@ -85,7 +86,7 @@ final fileprivate class IncrementalStoreUUIDTestDouble : IncrementalStoreUUID {
       )
     ),
     animals: AnimalsState.Animals(
-      data: Dictionary(
+      data: TreeDictionary(
         Animal.dog,
         Animal.cat,
         Animal.kangaroo,
@@ -101,7 +102,7 @@ extension LocalStoreTests {
   @Test func fetchCategoriesQuery() async throws {
     let store = try LocalStore<IncrementalStoreUUIDTestDouble>(isStoredInMemoryOnly: true)
     let categories = try await store.fetchCategoriesQuery()
-    #expect(Dictionary(categories) == Self.state.categories.data)
+    #expect(TreeDictionary(categories) == Self.state.categories.data)
     
     #expect(store.modelExecutor.modelContext.hasChanges == false)
   }
@@ -111,7 +112,7 @@ extension LocalStoreTests {
   @Test func fetchAnimalsQuery() async throws {
     let store = try LocalStore<IncrementalStoreUUIDTestDouble>(isStoredInMemoryOnly: true)
     let animals = try await store.fetchAnimalsQuery()
-    #expect(Dictionary(animals) == Self.state.animals.data)
+    #expect(TreeDictionary(animals) == Self.state.animals.data)
     
     #expect(store.modelExecutor.modelContext.hasChanges == false)
   }
@@ -133,7 +134,7 @@ extension LocalStoreTests {
     let array = try store.modelExecutor.modelContext.fetch(AnimalModel.self)
     let animals = array.map { model in model.animal() }
     #expect(
-      Dictionary(animals) == {
+      TreeDictionary(animals) == {
         var data = Self.state.animals.data
         data["uuidString"] = Animal(
           animalId: "uuidString",
@@ -165,7 +166,7 @@ extension LocalStoreTests {
     let array = try store.modelExecutor.modelContext.fetch(AnimalModel.self)
     let animals = array.map { model in model.animal() }
     #expect(
-      Dictionary(animals) == {
+      TreeDictionary(animals) == {
         var data = Self.state.animals.data
         data[animal.id] = Animal(
           animalId: animal.id,
@@ -220,7 +221,7 @@ extension LocalStoreTests {
     let array = try store.modelExecutor.modelContext.fetch(AnimalModel.self)
     let animals = array.map { model in model.animal() }
     #expect(
-      Dictionary(animals) == {
+      TreeDictionary(animals) == {
         var data = Self.state.animals.data
         data[animal.id] = nil
       return data
@@ -273,18 +274,18 @@ extension LocalStoreTests {
     )
     try store.modelExecutor.modelContext.save()
     let (animals, categories) = try await store.reloadSampleDataMutation()
-    #expect(Dictionary(animals) == Self.state.animals.data)
-    #expect(Dictionary(categories) == Self.state.categories.data)
+    #expect(TreeDictionary(animals) == Self.state.animals.data)
+    #expect(TreeDictionary(categories) == Self.state.categories.data)
     
     do {
       let array = try store.modelExecutor.modelContext.fetch(AnimalModel.self)
       let animals = array.map { model in model.animal() }
-      #expect(Dictionary(animals) == Self.state.animals.data)
+      #expect(TreeDictionary(animals) == Self.state.animals.data)
     }
     do {
       let array = try store.modelExecutor.modelContext.fetch(CategoryModel.self)
       let categories = array.map { model in model.category() }
-      #expect(Dictionary(categories) == Self.state.categories.data)
+      #expect(TreeDictionary(categories) == Self.state.categories.data)
     }
     
     #expect(store.modelExecutor.modelContext.hasChanges == false)

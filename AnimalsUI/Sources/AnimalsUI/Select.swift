@@ -15,6 +15,7 @@
 //
 
 import AnimalsData
+import Collections
 import ImmutableData
 import ImmutableUI
 import SwiftUI
@@ -110,7 +111,7 @@ extension ImmutableUI.Selector {
 }
 
 @MainActor @propertyWrapper struct SelectAnimalsValues: DynamicProperty {
-  @ImmutableUI.Selector<ImmutableData.Store<AnimalsState, AnimalsAction>, Dictionary<Animal.ID, Animal>, Array<Animal>> var wrappedValue: Array<Animal>
+  @ImmutableUI.Selector<ImmutableData.Store<AnimalsState, AnimalsAction>, TreeDictionary<Animal.ID, Animal>, Array<Animal>> var wrappedValue: Array<Animal>
   
   init(categoryId: AnimalsData.Category.ID?) {
     self._wrappedValue = ImmutableUI.Selector(

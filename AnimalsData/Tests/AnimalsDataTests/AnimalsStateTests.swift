@@ -15,13 +15,14 @@
 //
 
 import AnimalsData
+import Collections
 import Foundation
 import Testing
 
 @Suite final actor AnimalsStateTests {
   private static let state = AnimalsState(
     categories: AnimalsState.Categories(
-      data: Dictionary(
+      data: TreeDictionary(
         Category.amphibian,
         Category.bird,
         Category.fish,
@@ -31,7 +32,7 @@ import Testing
       )
     ),
     animals: AnimalsState.Animals(
-      data: Dictionary(
+      data: TreeDictionary(
         Animal.dog,
         Animal.cat,
         Animal.kangaroo,

@@ -15,6 +15,7 @@
 //
 
 import AnimalsData
+import Collections
 import Foundation
 import Testing
 
@@ -54,7 +55,7 @@ extension RemoteStoreNetworkSessionTestDouble : RemoteStoreNetworkSession {
 @Suite final actor RemoteStoreTests {
   private static let state = AnimalsState(
     categories: AnimalsState.Categories(
-      data: Dictionary(
+      data: TreeDictionary(
         Category.amphibian,
         Category.bird,
         Category.fish,
@@ -64,7 +65,7 @@ extension RemoteStoreNetworkSessionTestDouble : RemoteStoreNetworkSession {
       )
     ),
     animals: AnimalsState.Animals(
-      data: Dictionary(
+      data: TreeDictionary(
         Animal.dog,
         Animal.cat,
         Animal.kangaroo,

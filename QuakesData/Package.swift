@@ -22,6 +22,14 @@ let package = Package(
       url: "https://github.com/apple/swift-algorithms.git",
       from: "1.2.0"
     ),
+    .package(
+      url: "https://github.com/apple/swift-collections.git",
+      from: "1.1.4"
+    ),
+    .package(
+      url: "https://github.com/swift-cowbox/swift-cowbox.git",
+      from: "1.0.0"
+    ),
     .package(path: "../AsyncSequenceTestUtils"),
     .package(path: "../ImmutableData"),
     .package(path: "../Services"),
@@ -30,6 +38,14 @@ let package = Package(
     .target(
       name: "QuakesData",
       dependencies: [
+        .product(
+          name: "Collections",
+          package: "swift-collections"
+        ),
+        .product(
+          name: "CowBox",
+          package: "swift-cowbox"
+        ),
         "ImmutableData",
       ]
     ),

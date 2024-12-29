@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import Collections
 import Foundation
 import QuakesData
 import Testing
@@ -21,7 +22,7 @@ import Testing
 @Suite final actor QuakesFilterTests {
   private static let state = QuakesState(
     quakes: QuakesState.Quakes(
-      data: Dictionary(
+      data: TreeDictionary(
         Quake(
           quakeId: "1",
           magnitude: 0.5,

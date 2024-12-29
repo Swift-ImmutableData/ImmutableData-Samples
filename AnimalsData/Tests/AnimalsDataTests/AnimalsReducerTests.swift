@@ -15,12 +15,13 @@
 //
 
 import AnimalsData
+import Collections
 import Testing
 
 @Suite final actor AnimalsReducerTests {
   private static let state = AnimalsState(
     categories: AnimalsState.Categories(
-      data: Dictionary(
+      data: TreeDictionary(
         Category.amphibian,
         Category.bird,
         Category.fish,
@@ -30,7 +31,7 @@ import Testing
       )
     ),
     animals: AnimalsState.Animals(
-      data: Dictionary(
+      data: TreeDictionary(
         Animal.dog,
         Animal.cat,
         Animal.kangaroo,
@@ -334,7 +335,7 @@ extension AnimalsReducerTests {
       state.animals == Self.state.animals
     )
     #expect(
-      state.categories.data == Dictionary(
+      state.categories.data == TreeDictionary(
         Self.state.categories.data.values + [
           Category(
             categoryId: "categoryId",
@@ -399,7 +400,7 @@ extension AnimalsReducerTests {
       )
     )
     #expect(
-      state.animals.data == Dictionary(
+      state.animals.data == TreeDictionary(
         Self.state.animals.data.values + [
           Animal(
             animalId: "animalId",
@@ -481,7 +482,7 @@ extension AnimalsReducerTests {
       )
     )
     #expect(
-      state.animals.data == Dictionary(
+      state.animals.data == TreeDictionary(
         Animal(
           animalId: "animalId",
           name: "name",
@@ -498,7 +499,7 @@ extension AnimalsReducerTests {
       state.animals.queue == [:]
     )
     #expect(
-      state.categories.data == Dictionary(
+      state.categories.data == TreeDictionary(
         Category(
           categoryId: "categoryId",
           name: "name"
@@ -568,7 +569,7 @@ extension AnimalsReducerTests {
       )
     )
     #expect(
-      state.animals.data == Dictionary(
+      state.animals.data == TreeDictionary(
         Self.state.animals.data.values + [
           Animal(
             animalId: "animalId",

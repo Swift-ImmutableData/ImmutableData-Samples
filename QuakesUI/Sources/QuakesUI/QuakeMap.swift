@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import Collections
 import CoreLocation
 import MapKit
 import QuakesData
@@ -135,7 +136,7 @@ extension QuakeMap: View {
 
 extension QuakeMap {
   @MainActor fileprivate struct Container {
-    @SelectQuakes private var quakes: Dictionary<Quake.ID, Quake>
+    @SelectQuakes private var quakes: TreeDictionary<Quake.ID, Quake>
     @SelectQuake var listQuake: Quake?
     @SelectQuake var mapQuake: Quake?
     
@@ -175,14 +176,14 @@ extension QuakeMap.Container: View {
 
 extension QuakeMap {
   @MainActor fileprivate struct Presenter {
-    private let quakes: Dictionary<Quake.ID, Quake>
+    private let quakes: TreeDictionary<Quake.ID, Quake>
     private let listQuake: Quake?
     private let mapQuake: Quake?
     private let listSelection: Quake.ID?
     @Binding private var mapSelection: Quake.ID?
     
     init(
-      quakes: Dictionary<Quake.ID, Quake>,
+      quakes: TreeDictionary<Quake.ID, Quake>,
       listQuake: Quake?,
       mapQuake: Quake?,
       listSelection: Quake.ID?,
@@ -278,7 +279,7 @@ extension QuakeMap.Presenter: View {
 #Preview {
   @Previewable @State var mapSelection: Quake.ID?
   QuakeMap.Presenter(
-    quakes: Dictionary(uniqueKeysWithValues: Quake.previewQuakes.map { ($0.quakeId, $0) }),
+    quakes: TreeDictionary(uniqueKeysWithValues: Quake.previewQuakes.map { ($0.quakeId, $0) }),
     listQuake: nil,
     mapQuake: nil,
     listSelection: nil,

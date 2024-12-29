@@ -14,14 +14,12 @@
 //  limitations under the License.
 //
 
+import Collections
+import CowBox
 import Foundation
 
-public struct QuakesState: Hashable, Sendable {
+@CowBox(init: .withPackage) public struct QuakesState: Hashable, Sendable {
   package var quakes: Quakes
-  
-  package init(quakes: Quakes) {
-    self.quakes = quakes
-  }
 }
 
 extension QuakesState {
@@ -33,17 +31,9 @@ extension QuakesState {
 }
 
 extension QuakesState {
-  package struct Quakes: Hashable, Sendable {
-    package var data: Dictionary<Quake.ID, Quake> = [:]
+  @CowBox(init: .withPackage) package struct Quakes: Hashable, Sendable {
+    package var data: TreeDictionary<Quake.ID, Quake> = [:]
     package var status: Status? = nil
-    
-    package init(
-      data: Dictionary<Quake.ID, Quake> = [:],
-      status: Status? = nil
-    ) {
-      self.data = data
-      self.status = status
-    }
   }
 }
 
@@ -118,7 +108,7 @@ extension QuakesState {
 }
 
 extension QuakesState {
-  fileprivate func selectQuakes(filter isIncluded: (Quake) -> Bool) -> Dictionary<Quake.ID, Quake> {
+  fileprivate func selectQuakes(filter isIncluded: (Quake) -> Bool) -> TreeDictionary<Quake.ID, Quake> {
     self.quakes.data.filter { isIncluded($0.value) }
   }
 }
@@ -127,7 +117,7 @@ extension QuakesState {
   fileprivate func selectQuakes(
     searchText: String,
     searchDate: Date
-  ) -> Dictionary<Quake.ID, Quake> {
+  ) -> TreeDictionary<Quake.ID, Quake> {
     self.selectQuakes(
       filter: Quake.filter(
         searchText: searchText,
@@ -141,7 +131,7 @@ extension QuakesState {
   public static func selectQuakes(
     searchText: String,
     searchDate: Date
-  ) -> @Sendable (Self) -> Dictionary<Quake.ID, Quake> {
+  ) -> @Sendable (Self) -> TreeDictionary<Quake.ID, Quake> {
     { state in
       state.selectQuakes(
         searchText: searchText,

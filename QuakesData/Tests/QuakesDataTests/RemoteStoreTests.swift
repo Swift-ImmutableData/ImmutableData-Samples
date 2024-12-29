@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import Collections
 import Foundation
 import ImmutableData
 import QuakesData
@@ -74,7 +75,7 @@ extension NetworkSessionTestDouble : RemoteStoreNetworkSession {
 @Suite final actor RemoteStoreTests {
   private static let state = QuakesState(
     quakes: QuakesState.Quakes(
-      data: Dictionary(
+      data: TreeDictionary(
         Quake(
           quakeId: "1",
           magnitude: 0.5,
@@ -195,6 +196,6 @@ extension RemoteStoreTests {
     #expect(networkRequest.url == URL(string: string))
     #expect(networkRequest.httpMethod == "GET")
     
-    #expect(Dictionary(quakes) == Self.state.quakes.data)
+    #expect(TreeDictionary(quakes) == Self.state.quakes.data)
   }
 }
