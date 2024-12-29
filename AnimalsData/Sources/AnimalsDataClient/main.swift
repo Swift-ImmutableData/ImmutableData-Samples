@@ -13,3 +13,32 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+#if os(macOS)
+
+import AnimalsData
+import Foundation
+
+func makeLocalStore() throws -> LocalStore<UUID> {
+  if let url = Process().currentDirectoryURL?.appending(
+    component: "default.store",
+    directoryHint: .notDirectory
+  ) {
+    return try LocalStore<UUID>(url: url)
+  }
+  return try LocalStore<UUID>()
+}
+
+func main() async throws {
+  let store = try makeLocalStore()
+  
+  let animals = try await store.fetchAnimalsQuery()
+  print(animals)
+  
+  let categories = try await store.fetchCategoriesQuery()
+  print(categories)
+}
+
+try await main()
+
+#endif
