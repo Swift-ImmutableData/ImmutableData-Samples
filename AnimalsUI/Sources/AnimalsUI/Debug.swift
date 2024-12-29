@@ -13,3 +13,21 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+import SwiftUI
+
+extension UserDefaults {
+  fileprivate var isDebug: Bool {
+    self.bool(forKey: "com.northbronson.AnimalsUI.Debug")
+  }
+}
+
+extension View {
+  static func debugPrint() {
+#if DEBUG
+    if UserDefaults.standard.isDebug {
+      self._printChanges()
+    }
+#endif
+  }
+}
