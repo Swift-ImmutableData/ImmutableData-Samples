@@ -18,14 +18,17 @@ import AnimalsData
 import AnimalsUI
 import ImmutableData
 import ImmutableUI
+import Services
 import SwiftUI
+
+//  https://github.com/swiftlang/swift-evolution/blob/main/proposals/0364-retroactive-conformance-warning.md
 
 @main @MainActor struct AnimalsApp {
   @State private var store = Store(
     initialState: AnimalsState(),
     reducer: AnimalsReducer.reduce
   )
-  @State private var listener = Listener(store: Self.makeLocalStore())
+  @State private var listener = Listener(store: Self.makeRemoteStore())
   
   init() {
     self.listener.listen(to: self.store)
@@ -39,6 +42,17 @@ extension AnimalsApp {
     } catch {
       fatalError("\(error)")
     }
+  }
+}
+
+extension NetworkSession: @retroactive RemoteStoreNetworkSession {
+  
+}
+
+extension AnimalsApp {
+  private static func makeRemoteStore() -> RemoteStore<NetworkSession<URLSession>> {
+    let session = NetworkSession(urlSession: URLSession.shared)
+    return RemoteStore(session: session)
   }
 }
 
