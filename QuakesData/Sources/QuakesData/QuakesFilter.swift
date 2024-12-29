@@ -13,3 +13,26 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+public enum QuakesFilter {
+  
+}
+
+extension QuakesFilter {
+  public static func filterQuakes() -> @Sendable (QuakesState, QuakesAction) -> Bool {
+    { oldState, action in
+      switch action {
+      case .ui(.quakeList(.onTapDeleteSelectedQuakeButton)):
+        return true
+      case .ui(.quakeList(.onTapDeleteAllQuakesButton)):
+        return true
+      case .data(.persistentSession(.localStore(.didFetchQuakes(.success)))):
+        return true
+      case .data(.persistentSession(.remoteStore(.didFetchQuakes(.success)))):
+        return true
+      default:
+        return false
+      }
+    }
+  }
+}
