@@ -18,6 +18,7 @@
 
 import AnimalsData
 import Foundation
+import Services
 
 func makeLocalStore() throws -> LocalStore<UUID> {
   if let url = Process().currentDirectoryURL?.appending(
@@ -29,8 +30,17 @@ func makeLocalStore() throws -> LocalStore<UUID> {
   return try LocalStore<UUID>()
 }
 
+extension NetworkSession: RemoteStoreNetworkSession {
+  
+}
+
+func makeRemoteStore() -> RemoteStore<NetworkSession<URLSession>> {
+  let session = NetworkSession(urlSession: URLSession.shared)
+  return RemoteStore(session: session)
+}
+
 func main() async throws {
-  let store = try makeLocalStore()
+  let store = makeRemoteStore()
   
   let animals = try await store.fetchAnimalsQuery()
   print(animals)
