@@ -13,3 +13,43 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+#if os(macOS)
+
+import Foundation
+import QuakesData
+import Services
+
+extension NetworkSession: RemoteStoreNetworkSession {
+  
+}
+
+func makeLocalStore() throws -> LocalStore {
+  if let url = Process().currentDirectoryURL?.appending(
+    component: "default.store",
+    directoryHint: .notDirectory
+  ) {
+    return try LocalStore(url: url)
+  }
+  return try LocalStore()
+}
+
+func makeRemoteStore() -> RemoteStore<NetworkSession<URLSession>> {
+  let session = NetworkSession(urlSession: URLSession.shared)
+  return RemoteStore(session: session)
+}
+
+func main() async throws {
+  let localStore = try makeLocalStore()
+  let remoteStore = makeRemoteStore()
+  
+  let localQuakes = try await localStore.fetchLocalQuakesQuery()
+  print(localQuakes)
+  
+  let remoteQuakes = try await remoteStore.fetchRemoteQuakesQuery(range: .allHour)
+  print(remoteQuakes)
+}
+
+try await main()
+
+#endif
