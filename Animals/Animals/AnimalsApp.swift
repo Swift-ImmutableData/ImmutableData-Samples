@@ -14,13 +14,40 @@
 //  limitations under the License.
 //
 
+import AnimalsData
+import AnimalsUI
+import ImmutableData
+import ImmutableUI
 import SwiftUI
 
-@main
-struct AnimalsApp: App {
+@main @MainActor struct AnimalsApp {
+  @State private var store = Store(
+    initialState: AnimalsState(),
+    reducer: AnimalsReducer.reduce
+  )
+  @State private var listener = Listener(store: Self.makeLocalStore())
+  
+  init() {
+    self.listener.listen(to: self.store)
+  }
+}
+
+extension AnimalsApp {
+  private static func makeLocalStore() -> LocalStore<UUID> {
+    do {
+      return try LocalStore<UUID>()
+    } catch {
+      fatalError("\(error)")
+    }
+  }
+}
+
+extension AnimalsApp: App {
   var body: some Scene {
     WindowGroup {
-      Text("Hello, world!")
+      Provider(self.store) {
+        Content()
+      }
     }
   }
 }
