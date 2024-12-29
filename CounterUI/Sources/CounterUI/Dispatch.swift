@@ -13,3 +13,20 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+import CounterData
+import ImmutableData
+import ImmutableUI
+import SwiftUI
+
+@MainActor @propertyWrapper struct Dispatch : DynamicProperty {
+  @ImmutableUI.Dispatcher() private var dispatcher
+  
+  init() {
+    
+  }
+  
+  var wrappedValue: (CounterAction) throws -> () {
+    self.dispatcher.dispatch
+  }
+}
