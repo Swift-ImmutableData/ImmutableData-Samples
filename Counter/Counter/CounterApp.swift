@@ -14,13 +14,25 @@
 //  limitations under the License.
 //
 
+import CounterData
+import CounterUI
+import ImmutableData
+import ImmutableUI
 import SwiftUI
 
-@main
-struct CounterApp: App {
+@main @MainActor struct CounterApp {
+  @State private var store = Store(
+    initialState: CounterState(),
+    reducer: CounterReducer.reduce
+  )
+}
+
+extension CounterApp : App {
   var body: some Scene {
     WindowGroup {
-      Text("Hello, world!")
+      Provider(self.store) {
+        Content()
+      }
     }
   }
 }
