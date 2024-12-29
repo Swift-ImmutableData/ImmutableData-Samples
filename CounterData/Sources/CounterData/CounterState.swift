@@ -13,3 +13,17 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+public struct CounterState: Sendable {
+  package var value: Int
+  
+  public init(_ value: Int = 0) {
+    self.value = value
+  }
+}
+
+extension CounterState {
+  public static func selectValue() -> @Sendable (Self) -> Int {
+    { state in state.value }
+  }
+}
