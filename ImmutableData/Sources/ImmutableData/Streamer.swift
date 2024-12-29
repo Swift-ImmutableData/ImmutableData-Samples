@@ -13,3 +13,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+public protocol Streamer<State, Action> : Sendable {
+  associatedtype State : Sendable
+  associatedtype Action : Sendable
+  associatedtype Stream : AsyncSequence, Sendable where Self.Stream.Element == (oldState: Self.State, action: Self.Action)
+  
+  @MainActor func makeStream() -> Self.Stream
+}
