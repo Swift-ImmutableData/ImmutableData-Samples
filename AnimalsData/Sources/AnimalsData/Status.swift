@@ -13,3 +13,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+public enum Status: Hashable, Sendable {
+  case empty
+  case waiting
+  case success
+  case failure(error: String)
+}
