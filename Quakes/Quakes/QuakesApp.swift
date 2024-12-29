@@ -14,13 +14,57 @@
 //  limitations under the License.
 //
 
+import ImmutableData
+import ImmutableUI
+import QuakesData
+import QuakesUI
+import Services
 import SwiftUI
 
-@main
-struct QuakesApp: App {
+//  https://github.com/swiftlang/swift-evolution/blob/main/proposals/0364-retroactive-conformance-warning.md
+
+@main @MainActor struct QuakesApp {
+  @State private var store = Store(
+    initialState: QuakesState(),
+    reducer: QuakesReducer.reduce
+  )
+  @State private var listener = Listener(
+    localStore: Self.makeLocalStore(),
+    remoteStore: Self.makeRemoteStore()
+  )
+  
+  init() {
+    self.listener.listen(to: self.store)
+  }
+}
+
+extension QuakesApp {
+  private static func makeLocalStore() -> LocalStore {
+    do {
+      return try LocalStore()
+    } catch {
+      fatalError("\(error)")
+    }
+  }
+}
+
+extension NetworkSession: @retroactive RemoteStoreNetworkSession {
+  
+}
+
+extension QuakesApp {
+  private static func makeRemoteStore() -> RemoteStore<NetworkSession<URLSession>> {
+    let session = NetworkSession(urlSession: URLSession.shared)
+    return RemoteStore(session: session)
+  }
+}
+
+extension QuakesApp: App {
   var body: some Scene {
     WindowGroup {
-      Text("Hello, world!")
+      Provider(self.store) {
+        Content()
+      }
     }
   }
 }
