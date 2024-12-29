@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-public struct Category: Hashable, Sendable {
+public struct Category: Hashable, Codable, Sendable {
   public let categoryId: String
   public let name: String
   

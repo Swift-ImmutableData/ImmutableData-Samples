@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-public struct Animal: Hashable, Sendable {
+public struct Animal: Hashable, Codable, Sendable {
   public let animalId: String
   public let name: String
   public let diet: Diet
@@ -34,7 +34,7 @@ public struct Animal: Hashable, Sendable {
 }
 
 extension Animal {
-  public enum Diet: String, CaseIterable, Hashable, Sendable {
+  public enum Diet: String, CaseIterable, Hashable, Codable, Sendable {
     case herbivorous = "Herbivore"
     case carnivorous = "Carnivore"
     case omnivorous = "Omnivore"
