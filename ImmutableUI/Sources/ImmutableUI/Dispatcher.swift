@@ -13,3 +13,18 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+import ImmutableData
+import SwiftUI
+
+@MainActor @propertyWrapper public struct Dispatcher<Store> : DynamicProperty where Store : ImmutableData.Dispatcher {
+  @Environment private var store: Store
+  
+  public init(_ keyPath: WritableKeyPath<EnvironmentValues, Store>) {
+    self._store = Environment(keyPath)
+  }
+  
+  public var wrappedValue: some ImmutableData.Dispatcher<Store.State, Store.Action> {
+    self.store
+  }
+}

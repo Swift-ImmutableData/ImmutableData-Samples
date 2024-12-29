@@ -13,3 +13,27 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+import SwiftUI
+
+@MainActor public struct Provider<Store, Content> where Content : View {
+  private let keyPath: WritableKeyPath<EnvironmentValues, Store>
+  private let store: Store
+  private let content: Content
+  
+  public init(
+    _ keyPath: WritableKeyPath<EnvironmentValues, Store>,
+    _ store: Store,
+    @ViewBuilder content: () -> Content
+  ) {
+    self.keyPath = keyPath
+    self.store = store
+    self.content = content()
+  }
+}
+
+extension Provider : View {
+  public var body: some View {
+    self.content.environment(self.keyPath, self.store)
+  }
+}
