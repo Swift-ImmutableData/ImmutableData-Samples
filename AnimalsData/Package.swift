@@ -23,6 +23,10 @@ let package = Package(
       from: "1.2.0"
     ),
     .package(
+      url: "https://github.com/apple/swift-async-algorithms.git",
+      from: "1.0.3"
+    ),
+    .package(
       url: "https://github.com/vapor/vapor.git",
       from: "4.111.0"
     ),
@@ -55,6 +59,10 @@ let package = Package(
     .executableTarget(
       name: "AnimalsDataServer",
       dependencies: [
+        .product(
+          name: "AsyncAlgorithms",
+          package: "swift-async-algorithms"
+        ),
         .product(
           name: "Vapor",
           package: "vapor",
