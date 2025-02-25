@@ -60,16 +60,12 @@ extension AnimalsStateTests {
     partialKeyPath: PartialKeyPath<AnimalsData.Category> & Sendable,
     order: SortOrder
   ) {
-    func keyPath<Root, Value>(_ partialKeyPath: PartialKeyPath<Root>, valueType: Value.Type) -> KeyPath<Root, Value> & Sendable where Value : Comparable {
-      partialKeyPath as! KeyPath<Root, Value> & Sendable
-    }
-    func body<Value>(_: Value.Type) -> Value.Type {
-      Value.self
-    }
-    func test(
-      keyPath: KeyPath<AnimalsData.Category, some Comparable> & Sendable,
+    func test<Value>(
+      partialKeyPath: PartialKeyPath<AnimalsData.Category> & Sendable,
+      valueType: Value.Type,
       order: SortOrder
-    ) {
+    ) where Value : Comparable {
+      let keyPath = partialKeyPath as! KeyPath<AnimalsData.Category, Value> & Sendable
       let state = Self.state
       let values = AnimalsState.selectCategoriesValues(
         sort: keyPath,
@@ -78,8 +74,11 @@ extension AnimalsStateTests {
       #expect(values == state.categories.data.values.sorted(using: SortDescriptor(keyPath, order: order)))
     }
     let valueType = type(of: partialKeyPath).valueType as! any Comparable.Type
-    let keyPath = keyPath(partialKeyPath, valueType: _openExistential(valueType, do: body))
-    test(keyPath: keyPath, order: order)
+    test(
+      partialKeyPath: partialKeyPath,
+      valueType: valueType,
+      order: order
+    )
   }
 }
 
@@ -139,17 +138,13 @@ extension AnimalsStateTests {
     partialKeyPath: PartialKeyPath<Animal> & Sendable,
     order: SortOrder
   ) {
-    func keyPath<Root, Value>(_ partialKeyPath: PartialKeyPath<Root>, valueType: Value.Type) -> KeyPath<Root, Value> & Sendable where Value : Comparable {
-      partialKeyPath as! KeyPath<Root, Value> & Sendable
-    }
-    func body<Value>(_: Value.Type) -> Value.Type {
-      Value.self
-    }
-    func test(
+    func test<Value>(
       category: AnimalsData.Category,
-      keyPath: KeyPath<Animal, some Comparable> & Sendable,
+      partialKeyPath: PartialKeyPath<Animal> & Sendable,
+      valueType: Value.Type,
       order: SortOrder
-    ) {
+    ) where Value : Comparable {
+      let keyPath = partialKeyPath as! KeyPath<Animal, Value> & Sendable
       let state = Self.state
       let values = AnimalsState.selectAnimalsValues(
         categoryId: category.id,
@@ -161,8 +156,12 @@ extension AnimalsStateTests {
       }.sorted(using: SortDescriptor(keyPath, order: order)))
     }
     let valueType = type(of: partialKeyPath).valueType as! any Comparable.Type
-    let keyPath = keyPath(partialKeyPath, valueType: _openExistential(valueType, do: body))
-    test(category: category, keyPath: keyPath, order: order)
+    test(
+      category: category,
+      partialKeyPath: partialKeyPath,
+      valueType: valueType,
+      order: order
+    )
   }
 }
 
